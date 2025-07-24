@@ -1,8 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { Button } from "@/components/ui/button";
-import SlidingTiles from "@/components/SlidingTiles";
-import HorizontalScrollSection from "@/components/HorizontalScrollSection";
+import CircularTiles3D from "@/components/CircularTiles3D";
 import quasivoLogo from "@/assets/quasivo-logo.png";
 
 const Index = () => {
@@ -112,8 +111,8 @@ const Index = () => {
           </p>
         </div>
 
-        {/* Sliding Tiles Animation */}
-        <SlidingTiles industries={industries} />
+        {/* 3D Circular Tiles Animation */}
+        <CircularTiles3D industries={industries} />
 
         {/* Call to Action */}
         <div className="text-center px-6 py-16">
