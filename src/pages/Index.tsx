@@ -1,8 +1,14 @@
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 import { Button } from "@/components/ui/button";
-import IndustryCard from "@/components/IndustryCard";
+import SlidingTiles from "@/components/SlidingTiles";
+import HorizontalScrollSection from "@/components/HorizontalScrollSection";
 import quasivoLogo from "@/assets/quasivo-logo.png";
 
 const Index = () => {
+  const headerRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
+
   const industries = [
     {
       icon: "🏥",
@@ -54,61 +60,72 @@ const Index = () => {
     }
   ];
 
+  useEffect(() => {
+    // Animate header elements on load
+    if (headerRef.current) {
+      gsap.fromTo(headerRef.current, 
+        { opacity: 0, y: -50 },
+        { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
+      );
+    }
+
+    if (titleRef.current) {
+      gsap.fromTo(titleRef.current.children,
+        { opacity: 0, y: 30 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 0.8, 
+          stagger: 0.2, 
+          delay: 0.5,
+          ease: "back.out(1.7)" 
+        }
+      );
+    }
+  }, []);
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       {/* Header with Logo */}
-      <header className="p-6">
+      <header ref={headerRef} className="p-6 relative z-10">
         <div className="flex items-center">
           <img 
             src={quasivoLogo} 
             alt="Quasivo" 
-            className="h-12 w-auto animate-glow-pulse"
+            className="h-12 w-auto"
           />
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="px-6 pb-12">
-        <div className="max-w-7xl mx-auto">
-          {/* Section Header */}
-          <div className="text-center mb-16 animate-flow-right">
-            <h1 className="text-5xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
-              Industries We Serve
-            </h1>
-            <p className="text-xl text-muted-foreground mb-2">
-              AI Across All Domains
-            </p>
-            <p className="text-lg text-foreground/80">
-              From healthcare to entertainment, our AI solutions are revolutionizing every industry
-            </p>
-          </div>
+      <main>
+        {/* Section Header */}
+        <div ref={titleRef} className="text-center mb-16 px-6">
+          <h1 className="text-5xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
+            Industries We Serve
+          </h1>
+          <p className="text-xl text-muted-foreground mb-2">
+            AI Across All Domains
+          </p>
+          <p className="text-lg text-foreground/80">
+            From healthcare to entertainment, our AI solutions are revolutionizing every industry
+          </p>
+        </div>
 
-          {/* Industry Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
-            {industries.map((industry, index) => (
-              <IndustryCard
-                key={index}
-                icon={industry.icon}
-                stat={industry.stat}
-                title={industry.title}
-                description={industry.description}
-                delay={index * 100}
-              />
-            ))}
-          </div>
+        {/* Sliding Tiles Animation */}
+        <SlidingTiles industries={industries} />
 
-          {/* Call to Action */}
-          <div className="text-center animate-flow-right" style={{ animationDelay: '800ms' }}>
-            <p className="text-lg text-foreground/80 mb-6">
-              Don't see your industry? We adapt our AI solutions to any domain.
-            </p>
-            <Button 
-              size="lg" 
-              className="bg-gradient-primary hover:shadow-glow transition-all duration-300 transform hover:scale-105 text-lg px-8 py-3"
-            >
-              Contact us for custom solutions →
-            </Button>
-          </div>
+        {/* Call to Action */}
+        <div className="text-center px-6 py-16">
+          <p className="text-lg text-foreground/80 mb-6">
+            Don't see your industry? We adapt our AI solutions to any domain.
+          </p>
+          <Button 
+            size="lg" 
+            className="bg-gradient-primary hover:shadow-glow transition-all duration-300 transform hover:scale-105 text-lg px-8 py-3"
+          >
+            Contact us for custom solutions →
+          </Button>
         </div>
       </main>
     </div>
